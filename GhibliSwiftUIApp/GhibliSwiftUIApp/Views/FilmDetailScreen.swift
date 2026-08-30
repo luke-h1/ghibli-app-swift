@@ -9,8 +9,8 @@ import SwiftUI
 
 struct FilmDetailScreen: View {
     let film: Film
-    let favoritesViewModel: FavoritesViewModel
 
+    @Environment(FavoritesViewModel.self) private var favoritesViewModel
     @State private var viewModel = FilmDetailViewModel()
 
     private var isFavorite: Bool {
@@ -135,6 +135,7 @@ private struct StatChip: View {
 
 #Preview {
     NavigationStack {
-        FilmDetailScreen(film: .example, favoritesViewModel: .example)
+        FilmDetailScreen(film: .example)
     }
+    .environment(FavoritesViewModel.example)
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SettingsScreen: View {
 
-    let favoritesViewModel: FavoritesViewModel
+    @Environment(FavoritesViewModel.self) private var favoritesViewModel
 
     var body: some View {
         NavigationStack {
@@ -66,5 +66,6 @@ struct SettingsScreen: View {
 }
 
 #Preview {
-    SettingsScreen(favoritesViewModel: .example)
+    SettingsScreen()
+        .environment(FavoritesViewModel.example)
 }
