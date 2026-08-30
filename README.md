@@ -2,6 +2,12 @@
 
 A small SwiftUI app for browsing Studio Ghibli films, built to practise MVVM and modern Swift concurrency.
 
+## Demo
+
+| Movies | Favorites | Search |
+| --- | --- | --- |
+| ![Movies feed](docs/screenshots/movies.png) | ![Favorites](docs/screenshots/favorites.png) | ![Search](docs/screenshots/search.png) |
+
 ## Features
 
 - Cinematic feed of films with cover art
