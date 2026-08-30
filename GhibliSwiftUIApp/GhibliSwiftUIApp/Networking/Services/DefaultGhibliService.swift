@@ -9,8 +9,7 @@ import Foundation
 
 struct DefaultGhibliService: GhibliService {
     func fetch<T: Decodable>(from URLString: String, type: T.Type) async throws
-        -> T
-    {
+        -> T {
         guard let url = URL(string: URLString) else {
             throw ApiError.invalidURL
         }

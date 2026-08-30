@@ -16,7 +16,7 @@ struct Person: Identifiable, Decodable, Equatable {
     let films: [String]
     let species: String
     let url: String
-    
+
     enum CodingKeys: String, CodingKey {
         case id
         case name
