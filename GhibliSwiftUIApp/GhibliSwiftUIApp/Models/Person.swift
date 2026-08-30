@@ -6,7 +6,7 @@ import Foundation
 //  Created by luke howsam on 28/08/2026.
 //
 
-struct Person: Identifiable, Decodable {
+struct Person: Identifiable, Decodable, Equatable {
     let id: String
     let name: String
     let gender: String

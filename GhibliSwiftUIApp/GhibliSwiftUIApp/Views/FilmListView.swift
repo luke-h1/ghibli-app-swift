@@ -9,12 +9,12 @@ import SwiftUI
 
 struct FilmListView: View {
 
-    @State private var filmsViewModel = FilmsViewModel()
+    var filmsViewModel: FilmsViewModel
 
     var body: some View {
         NavigationStack {
 
-            switch filmsViewModel.state {
+        switch filmsViewModel.state {
             case .idle:
                 Text("No Films yet")
             case .loading:
@@ -22,9 +22,18 @@ struct FilmListView: View {
                     Text("Loading...")
                 }
 
-            case .loaded(let array):
-                List(filmsViewModel.films) {
-                    Text($0.title)
+            case .loaded(let films):
+                List(films) { film in
+                    NavigationLink(value: film) {
+                        HStack {
+                            FilmImageView(urlPath: film.image).frame(width: 150, height: 150)
+                            
+                        }
+                        Text(film.title)
+                    }
+                }
+                .navigationDestination(for: Film.self) { film in
+                    FilmDetailScreen(film: film)
                 }
 
             case .error(let error):
@@ -38,5 +47,6 @@ struct FilmListView: View {
 }
 
 #Preview {
-    FilmListView()
+    let vm = FilmsViewModel(service: DefaultGhibliService())
+    FilmListView(filmsViewModel: vm)
 }

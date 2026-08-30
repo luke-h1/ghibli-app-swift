@@ -6,7 +6,7 @@ import Foundation
 //  Created by luke howsam on 28/08/2026.
 //
 
-struct Film: Codable, Identifiable, Equatable {
+struct Film: Codable, Identifiable, Equatable, Hashable {
     let id: String
     let title: String
     let image: String

@@ -11,7 +11,9 @@ import SwiftUI
 struct GhibliSwiftUIAppApp: App {
     var body: some Scene {
         WindowGroup {
-            FilmListView()
+            FilmListView(
+                filmsViewModel: FilmsViewModel(service: MockGhibliService())
+            )
         }
     }
 }
