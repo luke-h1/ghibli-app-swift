@@ -1,6 +1,6 @@
 # Ghibli
 
-A small SwiftUI app for browsing Studio Ghibli films, built to practise MVVM and modern Swift concurrency.
+A small SwiftUI app for browsing Studio Ghibli films, built to practice MVVM and modern Swift concurrency.
 
 ## Demo
 
