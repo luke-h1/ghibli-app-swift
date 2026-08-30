@@ -12,9 +12,7 @@ struct FilmDetailScreen: View {
     let film: Film
     let favoritesViewModel: FavoritesViewModel
 
-    @State private var viewModel = FilmDetailViewModel(
-        service: DefaultGhibliService()
-    )
+    @State private var viewModel = FilmDetailViewModel()
 
     private var isFavorite: Bool {
         favoritesViewModel.isFavorite(filmID: film.id)
