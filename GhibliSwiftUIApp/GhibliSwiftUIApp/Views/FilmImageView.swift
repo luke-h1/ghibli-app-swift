@@ -12,18 +12,26 @@ struct FilmImageView: View {
     let urlPath: String
 
     var body: some View {
-        AsyncImage(url: URL(string: urlPath)) {
-            phase in
+        AsyncImage(url: URL(string: urlPath)) { phase in
             switch phase {
-            case .empty: Color.gray
+            case .empty:
+                Color.gray.opacity(0.2)
             case .success(let image):
                 image.resizable().scaledToFill()
-            case .failure(_):
-                Text("Could not get image")
-
+            case .failure:
+                ZStack {
+                    Color.gray.opacity(0.2)
+                    Image(systemName: "photo")
+                        .foregroundStyle(.secondary)
+                }
             @unknown default:
-                fatalError()
+                Color.gray.opacity(0.2)
             }
-        }.frame(height: 200)
+        }
     }
+}
+
+#Preview {
+    FilmImageView(urlPath: Film.example.image)
+        .frame(width: 150, height: 150)
 }

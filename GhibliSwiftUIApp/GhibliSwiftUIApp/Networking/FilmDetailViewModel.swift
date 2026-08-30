@@ -7,7 +7,6 @@
 
 import Foundation
 import Observation
-import Playgrounds
 
 @Observable
 class FilmDetailViewModel {
