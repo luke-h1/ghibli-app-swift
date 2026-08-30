@@ -43,3 +43,11 @@ class FilmsViewModel {
     }
 
 }
+
+extension FilmsViewModel {
+    static var example: FilmsViewModel {
+        let vm = FilmsViewModel(service: MockGhibliService())
+        vm.state = .loaded(Film.samples)
+        return vm
+    }
+}
