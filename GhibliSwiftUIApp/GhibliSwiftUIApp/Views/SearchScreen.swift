@@ -9,8 +9,7 @@ import SwiftUI
 
 struct SearchScreen: View {
 
-    let filmsViewModel: FilmsViewModel
-    let favoritesViewModel: FavoritesViewModel
+    @Environment(FilmsViewModel.self) private var filmsViewModel
 
     @State private var text: String = ""
 
@@ -35,10 +34,7 @@ struct SearchScreen: View {
                 if results.isEmpty {
                     ContentUnavailableView.search(text: text)
                 } else {
-                    FilmListView(
-                        films: results,
-                        favoritesViewModel: favoritesViewModel
-                    )
+                    FilmListView(films: results)
                 }
             }
             .navigationTitle("Search")
@@ -48,8 +44,7 @@ struct SearchScreen: View {
 }
 
 #Preview {
-    SearchScreen(
-        filmsViewModel: .example,
-        favoritesViewModel: .example
-    )
+    SearchScreen()
+        .environment(FilmsViewModel.example)
+        .environment(FavoritesViewModel.example)
 }

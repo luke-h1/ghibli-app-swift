@@ -10,7 +10,8 @@ import SwiftUI
 struct FilmListView: View {
 
     let films: [Film]
-    let favoritesViewModel: FavoritesViewModel
+
+    @Environment(FavoritesViewModel.self) private var favoritesViewModel
 
     var body: some View {
         ScrollView {
@@ -23,7 +24,7 @@ struct FilmListView: View {
         }
         .scrollIndicators(.hidden)
         .navigationDestination(for: Film.self) { film in
-            FilmDetailScreen(film: film, favoritesViewModel: favoritesViewModel)
+            FilmDetailScreen(film: film)
         }
     }
 
@@ -52,6 +53,7 @@ struct FilmListView: View {
 
 #Preview {
     NavigationStack {
-        FilmListView(films: Film.samples, favoritesViewModel: .example)
+        FilmListView(films: Film.samples)
     }
+    .environment(FavoritesViewModel.example)
 }

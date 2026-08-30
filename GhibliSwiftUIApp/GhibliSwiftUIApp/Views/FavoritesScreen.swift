@@ -9,8 +9,8 @@ import SwiftUI
 
 struct FavoritesScreen: View {
 
-    let filmsViewModel: FilmsViewModel
-    let favoritesViewModel: FavoritesViewModel
+    @Environment(FilmsViewModel.self) private var filmsViewModel
+    @Environment(FavoritesViewModel.self) private var favoritesViewModel
 
     var films: [Film] {
         guard case .loaded(let films) = filmsViewModel.state else {
@@ -29,10 +29,7 @@ struct FavoritesScreen: View {
                         description: Text("Films you favorite will show up here.")
                     )
                 } else {
-                    FilmListView(
-                        films: films,
-                        favoritesViewModel: favoritesViewModel
-                    )
+                    FilmListView(films: films)
                 }
             }
             .navigationTitle("Favorites")
@@ -41,8 +38,7 @@ struct FavoritesScreen: View {
 }
 
 #Preview {
-    FavoritesScreen(
-        filmsViewModel: .example,
-        favoritesViewModel: .example
-    )
+    FavoritesScreen()
+        .environment(FilmsViewModel.example)
+        .environment(FavoritesViewModel.example)
 }

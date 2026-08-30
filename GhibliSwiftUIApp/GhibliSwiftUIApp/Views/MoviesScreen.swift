@@ -9,8 +9,7 @@ import SwiftUI
 
 struct MoviesScreen: View {
 
-    let filmsViewModel: FilmsViewModel
-    let favoritesViewModel: FavoritesViewModel
+    @Environment(FilmsViewModel.self) private var filmsViewModel
 
     var body: some View {
         NavigationStack {
@@ -20,10 +19,7 @@ struct MoviesScreen: View {
                     LoadingFeed()
 
                 case .loaded(let films):
-                    FilmListView(
-                        films: films,
-                        favoritesViewModel: favoritesViewModel
-                    )
+                    FilmListView(films: films)
 
                 case .error(let error):
                     ContentUnavailableView(
@@ -60,8 +56,7 @@ private struct LoadingFeed: View {
 }
 
 #Preview {
-    MoviesScreen(
-        filmsViewModel: .example,
-        favoritesViewModel: .example
-    )
+    MoviesScreen()
+        .environment(FilmsViewModel.example)
+        .environment(FavoritesViewModel.example)
 }
