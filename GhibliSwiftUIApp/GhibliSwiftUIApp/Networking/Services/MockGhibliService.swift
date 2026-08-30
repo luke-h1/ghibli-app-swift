@@ -37,11 +37,11 @@ struct MockGhibliService: GhibliService {
         let data = try loadSampleData()
         return data.films
     }
-    
+
     // MARK: test only
     func fetchFilm() async throws -> Film {
         let data = try loadSampleData()
-        
+
         return data.films.first!
     }
 

@@ -5,7 +5,6 @@
 //  Created by luke howsam on 30/08/2026.
 //
 
-import Foundation
 import SwiftUI
 
 struct FilmDetailScreen: View {
@@ -20,74 +19,117 @@ struct FilmDetailScreen: View {
 
     var body: some View {
         ScrollView {
-            FilmImageView(urlPath: film.bannerImage)
-                .frame(height: 300)
-                .containerRelativeFrame(.horizontal)
-                .clipped()
+            VStack(alignment: .leading, spacing: Theme.Spacing.lg) {
+                hero
 
-            VStack(alignment: .leading, spacing: 12) {
-                Text(film.title)
-                    .font(.title)
-                    .bold()
+                VStack(alignment: .leading, spacing: Theme.Spacing.lg) {
+                    Text(film.description)
 
-                HStack(spacing: 16) {
-                    Label(film.releaseDate, systemImage: "calendar")
-                    Label("\(film.duration) min", systemImage: "clock")
-                    Label(film.score, systemImage: "star.fill")
+                    charactersSection
                 }
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-
-                Text("Directed by \(film.director)")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-
-                Text(film.description)
-
-                Divider()
-
-                Text("Characters").font(.title3).bold()
-
-                switch viewModel.state {
-                case .idle:
-                    EmptyView()
-                case .loading:
-                    ProgressView {
-                        Text("Loading...")
-                    }
-                case .error(let error):
-                    Text(error)
-                        .foregroundStyle(.red)
-                case .loaded(let people):
-                    if people.isEmpty {
-                        Text("No character info available.")
-                            .foregroundStyle(.secondary)
-                    } else {
-                        ForEach(people) { person in
-                            Text(person.name)
-                        }
-                    }
-                }
+                .padding(.horizontal, Theme.Spacing.md)
+                .padding(.bottom, Theme.Spacing.lg)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
         }
+        .scrollIndicators(.hidden)
+        .ignoresSafeArea(edges: .top)
         .task(id: film) {
             await viewModel.fetch(for: film)
         }
-        .navigationTitle(film.title)
-        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button {
+                FavoriteButton(isFavorite: isFavorite, prominent: true) {
                     favoritesViewModel.toggleFavorite(filmID: film.id)
-                } label: {
-                    Image(systemName: isFavorite ? "heart.fill" : "heart")
-                        .foregroundStyle(.pink)
                 }
-                .accessibilityLabel(isFavorite ? "Unfavorite" : "Favorite")
             }
         }
+        .toolbarBackground(.hidden, for: .navigationBar)
+    }
+
+    private var hero: some View {
+        Color.clear
+            .aspectRatio(Theme.heroAspectRatio, contentMode: .fit)
+            .overlay {
+                FilmImageView(urlPath: film.bannerImage)
+            }
+            .overlay { Theme.scrim }
+            .overlay(alignment: .bottomLeading) {
+                VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
+                    Text(film.title)
+                        .font(.largeTitle)
+                        .bold()
+                        .foregroundStyle(.white)
+
+                    Text("Directed by \(film.director)")
+                        .font(.subheadline)
+                        .foregroundStyle(.white.opacity(0.9))
+
+                    HStack(spacing: Theme.Spacing.sm) {
+                        StatChip(icon: "calendar", text: film.releaseDate)
+                        StatChip(icon: "clock", text: "\(film.duration) min")
+                        StatChip(icon: "star.fill", text: "\(film.score)%")
+                    }
+                    .padding(.top, Theme.Spacing.xs)
+                }
+                .padding(Theme.Spacing.md)
+            }
+    }
+
+    @ViewBuilder
+    private var charactersSection: some View {
+        Text("Characters")
+            .font(.title2)
+            .bold()
+
+        switch viewModel.state {
+        case .idle, .loading:
+            ProgressView()
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, Theme.Spacing.lg)
+
+        case .error(let error):
+            Text(error)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+        case .loaded(let people):
+            if people.isEmpty {
+                Text("No character info available.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            } else {
+                LazyVGrid(
+                    columns: [GridItem(.adaptive(minimum: 120), spacing: Theme.Spacing.sm)],
+                    alignment: .leading,
+                    spacing: Theme.Spacing.sm
+                ) {
+                    ForEach(people) { person in
+                        Text(person.name)
+                            .font(.subheadline)
+                            .lineLimit(1)
+                            .padding(.horizontal, Theme.Spacing.md)
+                            .padding(.vertical, Theme.Spacing.sm)
+                            .frame(maxWidth: .infinity)
+                            .background(.thinMaterial, in: .capsule)
+                    }
+                }
+            }
+        }
+    }
+}
+
+private struct StatChip: View {
+    let icon: String
+    let text: String
+
+    var body: some View {
+        Label(text, systemImage: icon)
+            .font(.caption)
+            .bold()
+            .foregroundStyle(.white)
+            .padding(.horizontal, Theme.Spacing.sm)
+            .padding(.vertical, Theme.Spacing.xs)
+            .background(.white.opacity(0.18), in: .capsule)
     }
 }
 

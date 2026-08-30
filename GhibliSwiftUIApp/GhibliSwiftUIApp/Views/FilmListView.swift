@@ -13,57 +13,40 @@ struct FilmListView: View {
     let favoritesViewModel: FavoritesViewModel
 
     var body: some View {
-        List(films) { film in
-            NavigationLink(value: film) {
-                FilmRow(film: film, favoritesViewModel: favoritesViewModel)
-            }
-            .swipeActions(edge: .trailing) {
-                let isFavorite = favoritesViewModel.isFavorite(filmID: film.id)
-                Button {
-                    favoritesViewModel.toggleFavorite(filmID: film.id)
-                } label: {
-                    Label(
-                        isFavorite ? "Unfavorite" : "Favorite",
-                        systemImage: isFavorite ? "heart.slash" : "heart"
-                    )
+        ScrollView {
+            LazyVStack(spacing: Theme.Spacing.lg) {
+                ForEach(films) { film in
+                    cell(for: film)
                 }
-                .tint(.pink)
             }
+            .padding(Theme.Spacing.md)
         }
-        .listStyle(.plain)
+        .scrollIndicators(.hidden)
         .navigationDestination(for: Film.self) { film in
             FilmDetailScreen(film: film, favoritesViewModel: favoritesViewModel)
         }
     }
-}
 
-private struct FilmRow: View {
-
-    let film: Film
-    let favoritesViewModel: FavoritesViewModel
-
-    var body: some View {
-        HStack(spacing: 12) {
-            FilmImageView(urlPath: film.image)
-                .frame(width: 70, height: 70)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text(film.title)
-                    .font(.headline)
-                Text(film.releaseDate)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+    private func cell(for film: Film) -> some View {
+        ZStack(alignment: .topTrailing) {
+            NavigationLink(value: film) {
+                FilmCard(film: film)
             }
+            .buttonStyle(.plain)
 
-            Spacer()
-
-            if favoritesViewModel.isFavorite(filmID: film.id) {
-                Image(systemName: "heart.fill")
-                    .foregroundStyle(.pink)
+            FavoriteButton(
+                isFavorite: favoritesViewModel.isFavorite(filmID: film.id),
+                prominent: true
+            ) {
+                favoritesViewModel.toggleFavorite(filmID: film.id)
             }
+            .padding(Theme.Spacing.sm)
         }
-        .padding(.vertical, 4)
+        .scrollTransition { content, phase in
+            content
+                .opacity(phase.isIdentity ? 1 : 0)
+                .scaleEffect(phase.isIdentity ? 1 : 0.94)
+        }
     }
 }
 

@@ -1,0 +1,10 @@
+included:
+  - GhibliSwiftUIApp/GhibliSwiftUIApp
+
+identifier_name:
+  excluded:
+    - id
+    - xs
+    - sm
+    - md
+    - lg

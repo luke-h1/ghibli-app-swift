@@ -47,10 +47,10 @@ class FavoritesViewModel {
 
 extension FavoritesViewModel {
     static var example: FavoritesViewModel {
-        let vm = FavoritesViewModel(
+        let viewModel = FavoritesViewModel(
             service: MockFavoriteStorage(favoriteIDs: [Film.samples[0].id])
         )
-        vm.load()
-        return vm
+        viewModel.load()
+        return viewModel
     }
 }

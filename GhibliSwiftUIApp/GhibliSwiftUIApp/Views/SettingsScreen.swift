@@ -14,6 +14,12 @@ struct SettingsScreen: View {
     var body: some View {
         NavigationStack {
             Form {
+                Section {
+                    header
+                        .listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.clear)
+                }
+
                 Section("Favorites") {
                     LabeledContent(
                         "Saved films",
@@ -35,6 +41,27 @@ struct SettingsScreen: View {
             }
             .navigationTitle("Settings")
         }
+    }
+
+    private var header: some View {
+        VStack(spacing: Theme.Spacing.sm) {
+            Image(systemName: "popcorn.fill")
+                .font(.system(size: 44))
+                .foregroundStyle(.tint)
+                .frame(width: 88, height: 88)
+                .background(.tint.opacity(0.12), in: .rect(cornerRadius: Theme.Radius.card))
+
+            Text("Ghibli")
+                .font(.title2)
+                .bold()
+
+            Text("A little library of Studio Ghibli films.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, Theme.Spacing.lg)
     }
 }
 

@@ -16,18 +16,15 @@ struct MoviesScreen: View {
         NavigationStack {
             Group {
                 switch filmsViewModel.state {
-                case .idle:
-                    Text("No Films yet")
+                case .idle, .loading:
+                    LoadingFeed()
 
-                case .loading:
-                    ProgressView {
-                        Text("Loading ...")
-                    }
                 case .loaded(let films):
                     FilmListView(
                         films: films,
                         favoritesViewModel: favoritesViewModel
                     )
+
                 case .error(let error):
                     ContentUnavailableView(
                         "Something went wrong",
@@ -41,6 +38,24 @@ struct MoviesScreen: View {
         .task {
             await filmsViewModel.fetch()
         }
+    }
+}
+
+private struct LoadingFeed: View {
+    var body: some View {
+        ScrollView {
+            LazyVStack(spacing: Theme.Spacing.lg) {
+                ForEach(0..<3, id: \.self) { _ in
+                    RoundedRectangle(cornerRadius: Theme.Radius.card)
+                        .fill(.quaternary)
+                        .aspectRatio(Theme.heroAspectRatio, contentMode: .fit)
+                }
+            }
+            .padding(Theme.Spacing.md)
+        }
+        .scrollDisabled(true)
+        .redacted(reason: .placeholder)
+        .accessibilityLabel("Loading films")
     }
 }
 

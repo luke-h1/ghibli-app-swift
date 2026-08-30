@@ -8,8 +8,6 @@
 import Foundation
 import Observation
 
-
-
 @Observable
 class FilmsViewModel {
     enum State: Equatable {
@@ -46,8 +44,8 @@ class FilmsViewModel {
 
 extension FilmsViewModel {
     static var example: FilmsViewModel {
-        let vm = FilmsViewModel(service: MockGhibliService())
-        vm.state = .loaded(Film.samples)
-        return vm
+        let viewModel = FilmsViewModel(service: MockGhibliService())
+        viewModel.state = .loaded(Film.samples)
+        return viewModel
     }
 }

@@ -33,10 +33,15 @@ class FilmDetailViewModel {
 
         var loadedPeople: [Person] = []
 
+        // Some films link the whole `/people/` collection rather than
+        // individual characters
+        let personURLs = film.people.filter { urlString in
+            URL(string: urlString)?.lastPathComponent.lowercased() != "people"
+        }
+
         do {
-            try await withThrowingTaskGroup(of: Person.self) {
-                group in
-                for personInfoURL in film.people {
+            try await withThrowingTaskGroup(of: Person.self) { group in
+                for personInfoURL in personURLs {
                     group.addTask {
                         try await self.service.fetchPerson(from: personInfoURL)
                     }
